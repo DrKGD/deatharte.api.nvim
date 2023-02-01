@@ -6,9 +6,7 @@ Well, I just grown tired of piling up utility functions which may serve some oth
 
 Hopefully this readme _should_ serve as a quick guide to which functionalities it provides.
 
-I'd rather keep number of **required dependencies** as low as possible, but I am not trying to reinvent the wheel; also *optional dependencies* are fine: The whole API **does not** load anything by itself on require/setup.
-
-## TODO
+I'd rather keep number of **required dependencies** as low as possible, but I am not trying to reinvent the wheel; also *optional dependencies* are fine: The whole API **does not** load anything by itself on require/setup. ## TODO
 - [ ] In-vim `:help` entry
 - [ ] Add tests tasks
 - [ ] Add detailed annotations throughout the repository
@@ -59,19 +57,12 @@ Using `lazy.nvim`:
         -- # Which-key integration
         { 'folke/which-key.nvim' }
     },
+
     config = function()
         require('deatharte').setup {
-            -- # Whether or not the api should be using
-            -- the following plugins (automatically detected)
-            --
-            -- If true but the optional dependency is missing
-            --  an error will be raised instead
-            deps = {
-                which_key = true,
-                sqlite = true,
-            }
+            -- ... options ...
         }
-    end},
+    end },
 ```
 
 ## What NOT to expect
@@ -89,6 +80,7 @@ full advantage of nvim package managers.
 
 #### deatharte.hnd.tracker
 A dynamic list which keeps _track_ of given objects.
+Currently supports sqlite to store its content.
 
 ```lua
 local tck = require('deatharte.hnd.tracker').new('file-tracker')

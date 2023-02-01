@@ -4,11 +4,6 @@
 local I = { }
 
 I.defaults	= {
-	deps = {
-		which_key = pcall(require, 'which-key'),	-- # Optional dependency which-key
-		sqlite		= pcall(require, 'sqlite')			-- # Optional dependency sqlite
-	},
-
 	hnd	= {
 		notificator = {
 			-- # Configure global notificator
@@ -22,8 +17,20 @@ I.defaults	= {
 				name		= 'generic-notificator',
 				timeout	= 1500
 			}
+		},
+
+		tracker	= {
+			-- # Which store method should be used
+			store			= pcall(require, 'sqlite') and 'sqlite',
+
+			-- # Where to store data path
+			uri				= ('%s/deatharte-api/tracker.sqlite'):format(vim.fn.stdpath('data')),
 		}
-	}
+	},
+
+	util = {
+		which_key = pcall(require, 'which-key'),	-- # Optional dependency which-key
+	},
 }
 
 I.config		= false
