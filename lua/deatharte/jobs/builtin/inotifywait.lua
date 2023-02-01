@@ -142,15 +142,15 @@ I.EVENTS = {
  UNMOUNT				= "unmount"
 }
 
----@diagnostic disable-next-line: unused-local
 I.events		= function(args, evs)
 	if not evs then return end
 	if type(evs) == 'string' then evs = { evs } end
-	if type(evs) ~= 'table'	then error("inotifywait.i:events, unrecognised type for evlist!") end
+	if type(evs) ~= 'table'	then error("inotifywait:events, unrecognised type for evlist!") end
 
 	local evlist = { }
 	for ix, entry in ipairs(evs) do
-		evlist[ix] = I.EVENTS[entry:upper()] or 'wtf'
+		evlist[ix] = I.EVENTS[entry:upper()] or
+			error(('inotifywait:events, %s not a valid event!'):format(entry))
 	end
 
 	args[#args+1] = '--event'

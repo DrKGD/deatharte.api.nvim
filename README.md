@@ -265,7 +265,7 @@ luamodified:start()
 ```
 
 ### deatharte.util
-As the name implies, the utility-suit of any project.
+As the name implies, the utility-suite of any project.
 
 #### deatharte.util.pkgs
 Dependencies, or as I like to call them, packages (pkgs) functionalities.
@@ -307,7 +307,7 @@ Short-lived, string related functionalities.
 - **count** Determines number of occurences of the given pattern in the string.
 
 #### deatharte.util.path
-Path related functionalities, probably tons of other APIs serves similiar purposes (and better).
+Path related functionalities, probably tons of other APIs serves similiar purposes (and way better than I do).
 
 - **fileExists** Determines whether or not the file exists.
 - **dirExists** Determines whether or not the directory exists.

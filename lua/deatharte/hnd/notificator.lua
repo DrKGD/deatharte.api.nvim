@@ -29,7 +29,6 @@ I.run_callback = function(list)
 				local call = (type(ck) == 'function' and ck)
 					or ck.callback or ck[1]
 
-
 				local tpcond = type(ck) == 'table' and type(ck.condition) or nil
 				if tpcond == nil
 					or ( tpcond == 'boolean' and tpcond)

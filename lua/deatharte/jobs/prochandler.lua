@@ -48,7 +48,7 @@ end
 -- # Specify callbacks as a list
 -- { callback = function(args), condition = true / function }
 -- WARNING: Do not use obj._job as it may be inconsistent for its async nature!
-I.run_callbacks = function(obj, list)
+I.run_callbacks = function(obj, list, bypass)
 	return function(...)
 		local store = { }
 		local args = { ... }
@@ -56,17 +56,17 @@ I.run_callbacks = function(obj, list)
 			args[#args+1] = store
 
 		for _, ck in ipairs(list or { }) do
-			if obj.callbacks or type(ck) == 'table' and ck.bypass then
-				local call = (type(ck) == 'function' and ck)
+			if bypass or obj.callbacks or (type(ck) == 'table' and ck.bypass) then
+				local tpcall = (type(ck) == 'function' and ck)
 					or ck.callback or ck[1]
 
-				local tpcond = type(ck) == 'table' and type(ck.condition) or nil
+				local tpcond = (type(ck) == 'table' and ck.condition and type(ck.condition)) or nil
 				if tpcond == nil
 					or ( tpcond == 'boolean' and tpcond)
 					or ( tpcond == 'function' and ck.condition(unpack(args))) then
 
-					if type(call) == 'function' then
-						call(unpack(args))
+					if type(tpcall) == 'function' then
+						tpcall(unpack(args))
 					end
 				end
 			end
@@ -191,10 +191,10 @@ function prochandler.new(opts)
 		-- # Should use callbacks at startup
 		ix.callbacks					= not opts.no_callbacks
 
-		-- # Custom "bypass" events
-		ix.on_respawn					= opts.on_respawn and I.run_callbacks(ix, opts.on_respawn)
-		ix.on_kill						= opts.on_kill and I.run_callbacks(ix, opts.on_kill)
-		ix.on_status_update		= opts.on_status_update and I.run_callbacks(ix, opts.on_status_update)
+		-- # More custom callbacks, always bypass callbacks respawn
+		ix.on_respawn					= opts.on_respawn and I.run_callbacks(ix, opts.on_respawn, true)
+		ix.on_kill						= opts.on_kill and I.run_callbacks(ix, opts.on_kill, true)
+		ix.on_status_update		= opts.on_status_update and I.run_callbacks(ix, opts.on_status_update, true)
 
 		-- # Default, plenary-handled, events
 		ix.on_exit						= ( type(opts.on_exit) == 'boolean' and not opts.on_exit and { } ) or opts.on_exit
@@ -222,8 +222,7 @@ end
 -- # Check if process is alive
 -- FIX: Cannot entirely trust a variable, as anything 
 --  can happen during the process startup
-function prochandler:alive()
-	return _isalive(self._job and self._job.pid)
+function prochandler:alive() return _isalive(self._job and self._job.pid)
 end
 
 -- # Starts the process 
@@ -281,18 +280,17 @@ function prochandler:respawn()
 	local was_killed = self:kill(true)
 
 	-- # If it was not killed then resume callbacks
-	if not was_killed and status
-		then self.callbacks = true
+	if not was_killed
+		then self.callbacks = status
 
 	-- # Restart callbacks if specified so
 	elseif self.on_respawn
-		then self.on_respawn()
-	end
+		then self.on_respawn() end
 
 	self:start(true)
 
 	-- Ensure callbacks were resumed
-	if self.callbacks then self.callbacks = true end
+	self.callbacks = status
 end
 
 -- # Set handlers 
