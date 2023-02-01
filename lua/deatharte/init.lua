@@ -7,6 +7,22 @@ I.defaults	= {
 	deps = {
 		which_key = pcall(require, 'which-key'),	-- # Optional dependency which-key
 		sqlite		= pcall(require, 'sqlite')			-- # Optional dependency sqlite
+	},
+
+	hnd	= {
+		notificator = {
+			-- # Configure global notificator
+			static = {
+				name		= 'deatharte.hnd.notificator',
+				render	= 'minimal'
+			},
+
+			-- # Default keys for new notificators
+			default = {
+				name		= 'generic-notificator',
+				timeout	= 1500
+			}
+		}
 	}
 }
 

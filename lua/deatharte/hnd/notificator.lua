@@ -8,6 +8,8 @@ if not hasnotify then
 local	utf8len			= require('deatharte.util.string').utf8len
 local	count				= require('deatharte.util.string').count
 
+local config = require('deatharte').fetch_configuration()
+
 ---   Deps   ---
 ----------------
 
@@ -117,7 +119,10 @@ notificator.state			= function() return notificator._enabled end
 -- # New notificator
 function notificator.new(opts)
 	opts = opts or { }
-		opts.name = opts.name or opts.plugin or 'deatharte.hnd.notify'
+		opts.name = opts.name or opts.plugin
+
+	-- # Fetch global configuration
+	opts = vim.tbl_deep_extend("keep", opts, config and config.hnd.notificator.default)
 
 	-- # Set known fields
 	-- The following fields can and will be overwritten within the ‹spawn› method
@@ -170,7 +175,6 @@ local function _message(message)
 
 	return message:gsub('\t', string.rep(' ', 4))
 end
-
 
 -- # Override fields for this notification
 local function _prepare(obj, content)
@@ -320,7 +324,7 @@ end
 metanotificator.__index			= notificator
 metanotificator.__call			= notificator.spawn
 
-staticnotificator.__fallback	= notificator.new({ render = 'minimal' })
+staticnotificator.__fallback	= notificator.new(config and config.hnd.notificator.static)
 staticnotificator.__index			= staticnotificator.__fallback
 staticnotificator.__call			= function(_, ...)
 	notificator.spawn(staticnotificator.__fallback, ...)

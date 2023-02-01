@@ -1,9 +1,16 @@
 # Deatharte Api
 Just my personal _API-ary_ 🤠.
 
+## What's the purpose of this?
+Well, I just grown tired of piling up utility functions which may serve some other users as well; also I just do not like to copy-paste code around, and I wish to get into nvim plugin development.
+
+Hopefully this readme _should_ serve as a quick guide to which functionalities it provides.
+
+I'd rather keep number of **required dependencies** as low as possible, but I am not trying to reinvent the wheel; also *optional dependencies* are fine: The whole API **does not** load anything by itself on require/setup.
+
 ## TODO
 - [ ] In-vim `:help` entry
-- [ ] Test throughly
+- [ ] Add tests tasks
 - [ ] Add detailed annotations throughout the repository
 - [ ] Add which-key integration
 
@@ -32,7 +39,7 @@ _Plug_ the configuration within your favorite package manager.
 
 **Note**
 While calling setup is _not_ a requirement, you may overwrite default behaviors.
-At any time call `require('deatharte').fetch_configuration()` to retrieve its in-use configuraiton.
+At any time call `require('deatharte').fetch_configuration()` to retrieve configuraiton.
 
 ### e.g. Lazy.nvim
 Using `lazy.nvim`:
@@ -156,7 +163,7 @@ local myntf = ntf.new({ name = 'My personal notificator', plugin = 'my-plugin' }
 ```
 
 ### deatharte.jobs
-Check external jobs and attach custom callbacks directly from within nvim, powered by `plenary.nvim`.
+Spawn external jobs directly from within nvim, powered by `plenary.nvim`.
 
 #### deatharte.jobs.prochandler
 An hi-level wrapper for `plenary.nvim`, featuring:
@@ -263,14 +270,67 @@ luamodified:start()
 -- But probably this job is better handled by changing its callback status
 ```
 
+### deatharte.util
+As the name implies, the utility-suit of any project.
+
+#### deatharte.util.pkgs
+Dependencies, or as I like to call them, packages (pkgs) functionalities.
+- **missingdeps** Check whether or not any dependency from the given list is missing. Acceps either a table or a list.
+```lua
+-- # e.g. list of dependencies to check for presence
+local md = require('deatharte.util.pkgs').missingdeps
+local list = md { 'awesome-library', 'another-awesome-library' }
+if list then
+	print('The following dependencies were not found', vim.inspect(list))
+end
+-- Output:
+-- The following dependencies were not found { "awesome-library", "another-awesome-library" }
+
+-- # e.g. same thing, but use a detailed callback instead
+local md = require('deatharte.util.pkgs').missingdeps
+local list = md {
+    { 'awesome-library', from = 'noname/awesome-library.nvim'} ,
+    { 'another-awesome-library', from ='noname/another-awesome-library.nvim' }
+}
+if list then
+	local msg = { 'The following dependencies were found to be missing:' }
+	for _, missing in ipairs(list or { }) do
+		msg[#msg + 1] = ('   ‹%s› from ‹%s›'):format(missing[1], missing.from)
+	end
+
+	print(table.concat(msg, '\n'))
+end
+-- Output: 
+-- The following dependencies were found to be missing:
+--    ‹awesome-library› from ‹noname/awesome-library.nvim›
+--    ‹another-awesome-library› from ‹noname/another-awesome-library.nvim›
+```
+
+#### deatharte.util.string
+Short-lived, string related functionalities.
+
+- **utf8len** Determines length of an utf8 string.
+- **count** Determines number of occurences of the given pattern in the string.
+
+#### deatharte.util.path
+Path related functionalities, probably tons of other APIs serves similiar purposes (and better).
+
+- **fileExists** Determines whether or not the file exists.
+- **dirExists** Determines whether or not the directory exists.
+- **isDir** Determines whether or not the given path is a directory or a file.
+- **dirParent** Returns the parent directory of the given filename.
+
+#### deatharte.util.vim
+Wrappers around vim builtin wrappers.
+
+**NOTE** Currently these functionalities are underdeveloped, precisely they are not user-ready, I'd avdise against using them in your configuration at any point, further updates will follow.
+- **setup_keybindings** Setup keybindings using a table-like format, inspired by `legendary.nvim`.
+- **setup_usercommands** Setup usercommands with a custom prefix.
+
 ## Issue tracker
 If either you were to spot a bug at any point in the repository, or
-you have any consideration, do not hesistate and open an issue.
-
-I'd rather keep the repository barebones, nevertheless pull requests
-are welcomed!
+you have any consideration/suggestion, do not hesistate and open an issue; I am not an experienced developer (I just do not consider myself to be one yet), I tend to read lots of documentations, but filthy bugs or faulty logic are bound to happen.
 
 ## Self-plug
 Hi there, this is Deatharte, nice to see you here!
-Hopefully you will also like my other plugins
-TODO
+Hopefully you will also like my other plugins... which will be coming soon!

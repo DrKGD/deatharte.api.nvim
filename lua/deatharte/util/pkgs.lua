@@ -18,13 +18,13 @@ M.missingdeps = function(dependencies)
 
 	local _unsatisfied = { }
 
-	for ix, dep in ipairs(dependencies) do
+	for _, dep in ipairs(dependencies) do
 		local name = (type(dep) == 'string' and dep)
 			or dep.package or dep[1]
 		local ok, _ = pcall(require, name)
 
 		if not ok then
-			_unsatisfied = dependencies[ix] end
+			_unsatisfied[#_unsatisfied + 1] = dep end
 	end
 
 	return (#_unsatisfied > 0 and _unsatisfied) or nil

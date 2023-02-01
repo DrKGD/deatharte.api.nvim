@@ -5,6 +5,7 @@ local M = { }
 ---   API    ---
 
 -- # UTF8 string length
+-- THANKS: http://lua-users.org/wiki/LuaUnicode
 M.utf8len = function(str)
 	local _, c = str:gsub("[^\128-\193]", "");
 	return c
