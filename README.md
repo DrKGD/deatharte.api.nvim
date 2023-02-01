@@ -6,11 +6,13 @@ Well, I just grown tired of piling up utility functions which may serve some oth
 
 Hopefully this readme _should_ serve as a quick guide to which functionalities it provides.
 
-I'd rather keep number of **required dependencies** as low as possible, but I am not trying to reinvent the wheel; also *optional dependencies* are fine: The whole API **does not** load anything by itself on require/setup. ## TODO
-- [ ] In-vim `:help` entry
-- [ ] Add tests tasks
-- [ ] Add detailed annotations throughout the repository
-- [ ] Add which-key integration
+I'd rather keep number of **required dependencies** as low as possible, but I am not trying to reinvent the wheel; also *optional dependencies* are fine: The whole API **does not** load anything by itself on require/setup. 
+
+## TODO
+- In-vim `:help` entry
+- Add tests tasks
+- Add detailed annotations throughout the repository
+- Add which-key integration
 
 ## Requirements
 The API has dependencies, you may still ignore them
