@@ -294,27 +294,27 @@ function prochandler:respawn()
 end
 
 -- # Set handlers 
-function prochandler:set_callbacks(new_state)
+function prochandler:set_callbacks(new_state, noevent)
 	local updated = (self.callbacks ~= new_state)
 	self.callbacks = new_state
 
-	if updated and self.on_status_update
+	if not noevent and updated and self.on_status_update
 		then self.on_status_update(self.callbacks) end
 end
 
 -- # Disable handlers
-function prochandler:block_callbacks()
-	self:set_callbacks(false)
+function prochandler:block_callbacks(noevent)
+	self:set_callbacks(false, noevent)
 end
 
 -- # Enable handlers
-function prochandler:resume_callbacks()
-	self:set_callbacks(true)
+function prochandler:resume_callbacks(noevent)
+	self:set_callbacks(true, noevent)
 end
 
 -- # Toggle handlers 
-function prochandler:toggle_callbacks()
-	self:set_callbacks(not self.callbacks)
+function prochandler:toggle_callbacks(noevent)
+	self:set_callbacks(not self.callbacks, noevent)
 end
 
 -- # Callbacks are being fired
