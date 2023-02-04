@@ -12,7 +12,6 @@ I'd rather keep number of **required dependencies** as low as possible, but I am
 - In-vim `:help` entry
 - Add tests tasks
 - Add detailed annotations throughout the repository
-- Add which-key integration
 - Notificator should also respect nvim-notify max-width setting
 
 ## Requirements

@@ -140,7 +140,7 @@ local function _ins_list(object, entries)
 		end
 	end
 
-	return vim.tbl_values(ins)
+	return vim.tbl_values(insquery)
 end
 
 -- # Add entries
