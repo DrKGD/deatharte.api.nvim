@@ -13,6 +13,7 @@ I'd rather keep number of **required dependencies** as low as possible, but I am
 - Add tests tasks
 - Add detailed annotations throughout the repository
 - Add which-key integration
+- Notificator should also respect nvim-notify max-width setting
 
 ## Requirements
 The API has dependencies, you may still ignore them
@@ -287,7 +288,7 @@ local list = md {
     { 'another-awesome-library', from ='noname/another-awesome-library.nvim' }
 }
 if list then
-	local msg = { 'The following dependencies were found to be missing:' }
+	local msg = { 'The following dependencies are not satisfied:' }
 	for _, missing in ipairs(list or { }) do
 		msg[#msg + 1] = ('   ‹%s› from ‹%s›'):format(missing[1], missing.from)
 	end

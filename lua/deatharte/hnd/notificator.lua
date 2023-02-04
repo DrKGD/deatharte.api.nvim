@@ -9,6 +9,7 @@ local	utf8len			= require('deatharte.util.string').utf8len
 local	count				= require('deatharte.util.string').count
 
 local config = require('deatharte').fetch_configuration()
+local notify_config = require('notify')._config()
 
 ---   Deps   ---
 ----------------
@@ -19,8 +20,6 @@ local I = { }
 
 -- # Run callback list
 I.run_callback = function(list)
-
-	-- # Only supports win (nvim-notify)
 	return function(obj, ntcontent, key)
 		return function(win)
 			local args = { win, obj, ntcontent, key or false }
@@ -87,7 +86,20 @@ local resize_entry = {
 		end, resize
 }
 
+local notify_onopen = {
+	condition = function(_)
+		return notify_config.on_open or false
+	end, notify_config.on_open
+}
+
+local notify_onclose = {
+	condition = function(_)
+		return notify_config.on_close or false
+	end, notify_config.on_close
+}
+
 I.required_onopen = {
+	notify_onopen,
 	set_alive,
 	resize_entry
 }
@@ -97,7 +109,7 @@ I.required_onupdate = {
 }
 
 I.required_onclose = {
-
+	notify_onclose
 }
 
 --- Internal ---
@@ -109,11 +121,11 @@ local metanotificator		= { }	-- # Metatable for class
 local staticnotificator = { } -- # Metatable for static object
 
 -- # Handle notifications globally
-notificator._enabled	= true
-notificator.enable		=	function() notificator._enabled = true end
-notificator.disable		=	function() notificator._enabled = false end
-notificator.toggle		=	function() notificator._enabled = not notificator._enabled end
-notificator.state			= function() return notificator._enabled end
+local global_enabled  = true
+notificator.genable		=	function() global_enabled = true end
+notificator.gdisable	=	function() global_enabled = false end
+notificator.gtoggle		=	function() global_enabled = not global_enabled end
+notificator.gstate		= function() return global_enabled end
 
 -- # New notificator
 function notificator.new(opts)
@@ -156,6 +168,9 @@ function notificator.new(opts)
 		ix.on_open		= I.run_callback(on_open)
 		ix.on_close		= I.run_callback(on_close)
 		ix.on_update	= I.run_callback(on_update)
+
+		-- Currently enabled
+		ix.enabled		= not opts.silent
 
 	return ix
 end
@@ -250,16 +265,16 @@ end
 
 -- # Spawn new notification
 function notificator:spawn(content)
-	-- # Global switch for notifications
-	if not notificator._enabled then
-		return end
-
 	-- HAX: This hurts my eyes but I don't know any better tbh
 	local o = getmetatable(self)
 	if o ~= metanotificator and o ~= staticnotificator then
 		return notificator.spawn(staticnotificator.__fallback, self) end
 	if self == notificator then
 		return notificator.spawn(staticnotificator.__fallback, content) end
+
+	-- # Is notification-system enabled?
+	if not global_enabled or not self.enabled then
+		return end
 
 	-- # Prepare content
 	local ntcontent = _prepare(self, _totable(content))
@@ -316,6 +331,11 @@ function notificator:debug(content)
 		content.nodismiss = true
 	self:spawn(content)
 end
+
+function notificator:enable() self.enabled = true end
+function notificator:disable() self.enabled = false end
+function notificator:toggle() self.enabled = not self.enabled end
+function notificator:state() return self.enabled end
 
 ---   API    ---
 ----------------

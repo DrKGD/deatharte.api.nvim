@@ -129,13 +129,13 @@ local function _ins_list(object, entries)
 	local parsed = _parse_list(object, entries)
 
 	-- # Prepare insertion list
-	local ins = { }
+	local insquery = { }
 	for _, entry in pairs(parsed) do
 		if not object.handle.track:where { key = entry.key } then
-			if ins[entry.key] and ins[entry.key] ~= entry.entry then
+			if insquery[entry.key] and insquery[entry.key] ~= entry.entry then
 				error(('Duplicate in insert for key ‹%s›'):format(parsed.key)) end
 
-			ins[entry.key] =
+			insquery[entry.key] =
 				{ entry = entry.entry, list = object.listid, key = entry.key }
 		end
 	end
@@ -207,7 +207,7 @@ function tracker.new(name, opts)
 	local ix = setmetatable({ }, tracker)
 		ix.name			= name
 		ix.verbose	= not opts.quiet
-		ix.notify		= require('nvimlocale.util.generic').notify({
+		ix.notify		= require('deatharte.hnd.notificator').new({
 			plugin = 'nvimlocale.watchlist',
 			title = ('%s watchlist'):format(name)
 		})
