@@ -268,12 +268,12 @@ luamodified:start()
 ### deatharte.util
 As the name implies, the utility-suite of any project.
 
-#### deatharte.util.pkgs
+#### deatharte.util.deps
 Dependencies, or as I like to call them, packages (pkgs) functionalities.
 - **missingdeps** Check whether or not any dependency from the given list is missing. Acceps either a table or a list.
 ```lua
 -- # e.g. list of dependencies to check for presence
-local md = require('deatharte.util.pkgs').missingdeps
+local md = require('deatharte.util.deps').missingdeps
 local list = md { 'awesome-library', 'another-awesome-library' }
 if list then
 	print('The following dependencies were not found', vim.inspect(list))
@@ -282,7 +282,7 @@ end
 -- The following dependencies were not found { "awesome-library", "another-awesome-library" }
 
 -- # e.g. same thing, but use a detailed callback instead
-local md = require('deatharte.util.pkgs').missingdeps
+local md = require('deatharte.util.deps').missingdeps
 local list = md {
     { 'awesome-library', from = 'noname/awesome-library.nvim'} ,
     { 'another-awesome-library', from ='noname/another-awesome-library.nvim' }
@@ -318,9 +318,12 @@ Path related functionalities, probably tons of other APIs serves similiar purpos
 #### deatharte.util.vim
 Wrappers around vim builtin wrappers.
 
-**NOTE** Currently these functionalities are underdeveloped, precisely they are not user-ready, I'd avdise against using them in your configuration at any point, further updates will follow.
-- **setup_keybindings** Setup keybindings using a table-like format, inspired by `legendary.nvim`.
-- **setup_usercommands** Setup usercommands with a custom prefix.
+**NOTE** These functionalities are not designed for user experience; they are subjected to changes, thus I'd refrain from using these in your nvim configuration, use nvim api instead or a helper of some sort such as [legendary.nvim](https://github.com/mrjones2014/legendary.nvim) or [amend.nvim](https://github.com/anuvyklack/keymap-amend.nvim).
+
+- **setup_usercommands** Setup usercommands using a table-like format, with _leader_ prefix and a name.
+- **setup_keybindings** Setup keybindings using a table-like format, with a _leader_ prefix, a secondary prefix and a key sequence.
+- **delete_keybindings** Remove keybindings using the previously given table.
+- **delete_usercommands** Remove installed user commands using the previously given table.
 
 ## Issue tracker
 If either you were to spot a bug at any point in the repository, or
