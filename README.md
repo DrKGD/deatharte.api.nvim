@@ -330,4 +330,5 @@ you have any consideration/suggestion, do not hesistate and open an issue; I am 
 
 ## Self-plug
 Hi there, this is Deatharte, nice to see you here!
-Hopefully you will also like my other plugins... which will be coming soon!
+Hopefully you will also like my other nvim projects
+- [nvimlocale.nvim](https://github.com/DrKGD/nvimlocale.nvim) per-project configuration.

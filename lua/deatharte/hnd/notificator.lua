@@ -298,7 +298,7 @@ end
 
 function notificator:info(content)
 	content = _totable(content)
-		content.cat				= 'info'
+		content.cat				= content and content.cat or 'info'
 		content.type			= 'info'
 		content.timeout		= content and content.timeout or 1500
 		content.hide			= true
@@ -307,7 +307,7 @@ end
 
 function notificator:warn(content)
 	content = _totable(content)
-		content.cat				= 'warn'
+		content.cat				= content and content.cat or 'warn'
 		content.type			= 'warn'
 		content.timeout		= content and content.timeout or 3000
 	self:spawn(content)
@@ -315,7 +315,7 @@ end
 
 function notificator:error(content)
 	content = _totable(content)
-		content.cat				= 'error'
+		content.cat				= content and content.cat or 'error'
 		content.type			= 'error'
 		content.noreplace	= true
 		content.nodismiss	= true
@@ -324,7 +324,7 @@ end
 
 function notificator:debug(content)
 	content = _totable(content)
-		content.cat				= 'debug'
+		content.cat				= content and content.cat or 'debug'
 		content.type			= 'info'
 		content.render		= 'minimal'
 		content.hide			= true
