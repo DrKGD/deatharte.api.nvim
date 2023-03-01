@@ -183,7 +183,7 @@ function prochandler.new(opts)
 
 		-- # For debugging
 		ix.name			= opts.name or 'unnamed-proc'
-		ix.notify		= require('deatharte.hnd.notificator').new({
+		ix.notify		= require('deatharte-api.hnd.notificator').new({
 			plugin = ('deatharte.jobs.%s'):format(ix.name),
 			title = ('Job %s'):format(ix.name)
 		})

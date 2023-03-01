@@ -6,7 +6,7 @@ if not vim.fn.executable('inotifywait') == 0 then
 	error('jobs.builtin.inotifywait: binary ‹inotifywait› was not found!')
 end
 
-local prochandler = require('deatharte.jobs.prochandler')
+local prochandler = require('deatharte-api.jobs.prochandler')
 
 ---   Deps   ---
 ----------------

@@ -2,7 +2,7 @@
 ----------------
 ---   Deps   ---
 
-local config = require('deatharte').fetch_configuration()
+local config = require('deatharte-api').fetch_configuration()
 local has_sqlite, db = pcall(require, 'sqlite')
 if config and config.hnd.tracker.store == 'sqlite' and not has_sqlite then
 	error('deatharte.hnd.tracker: optional dependency ‹sqlite› is not available, but the setup requires so!')
@@ -207,7 +207,7 @@ function tracker.new(name, opts)
 	local ix = setmetatable({ }, tracker)
 		ix.name			= name
 		ix.verbose	= not opts.quiet
-		ix.notify		= require('deatharte.hnd.notificator').new({
+		ix.notify		= require('deatharte-api.hnd.notificator').new({
 			plugin = 'nvimlocale.watchlist',
 			title = ('%s watchlist'):format(name)
 		})

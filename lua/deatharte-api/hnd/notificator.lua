@@ -5,10 +5,10 @@
 local hasnotify, nvimnotify = pcall(require, 'notify') -- # Requires rcarriga/nvim-notify
 if not hasnotify then
 	error('deatharte.hnd.notificator is missing the required dependency ‹nvim-notify›') end
-local	utf8len			= require('deatharte.util.string').utf8len
-local	count				= require('deatharte.util.string').count
+local	utf8len			= require('deatharte-api.util.string').utf8len
+local	count				= require('deatharte-api.util.string').count
 
-local config = require('deatharte').fetch_configuration()
+local config = require('deatharte-api').fetch_configuration()
 local notify_config = require('notify')._config()
 
 ---   Deps   ---

@@ -1,13 +1,6 @@
 --- # deatharte.util.vim
 -- Vim related functionalities
 
--- # Use which-key
-local config = require('deatharte').fetch_configuration()
-local has_whichkey, wk = pcall(require, 'which-key')
-if config and config.util.which_key and not has_whichkey then
-	error('deatharte.util.vim: optional dependency ‹which-key› is not available, but the setup requires so!')
-end
-
 --- Internal ---
 ----------------
 

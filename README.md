@@ -38,8 +38,8 @@ of the module functionalities will be granted anyway:
 _Plug_ the configuration within your favorite package manager.
 
 **Note**
-While calling setup is _not_ a requirement, you may overwrite default behaviors.
-At any time call `require('deatharte').fetch_configuration()` to retrieve configuraiton.
+While calling setup is _not_ a requirement, you may want to overwrite default behaviors.
+At any time call `require('deatharte-api').fetch_configuration()` to retrieve configuraiton.
 
 ### e.g. Lazy.nvim
 Using `lazy.nvim`:
@@ -60,8 +60,9 @@ Using `lazy.nvim`:
         { 'folke/which-key.nvim' }
     },
 
+    -- # The following is not required but it is recommended
     config = function()
-        require('deatharte').setup {
+        require('deatharte-api').setup {
             -- ... options ...
         }
     end },
@@ -85,7 +86,7 @@ A dynamic list which keeps _track_ of given objects.
 Currently supports sqlite to store its content.
 
 ```lua
-local tck = require('deatharte.hnd.tracker').new('file-tracker')
+local tck = require('deatharte-api.hnd.tracker').new('file-tracker')
 
 -- # Add new entries
 tck:add('file1.lua')
@@ -130,7 +131,7 @@ Features:
 - Different notifications styles are builtin (info, warn, error, debug), which should provide enough variation.
 
 ```lua
-local ntf = require('deatharte.hnd.notificator')
+local ntf = require('deatharte-api.hnd.notificator')
 
 -- # A static-instance is included
 -- Thus all of the following are available even without a custom instance
@@ -156,10 +157,10 @@ local myntf = ntf.new({ name = 'My personal notificator', plugin = 'my-plugin' }
 -- myntf:warn({ ... })
 ```
 
-### deatharte.jobs
+### deatharte-api.jobs
 Spawn external jobs directly from within nvim, powered by `plenary.nvim`.
 
-#### deatharte.jobs.prochandler
+#### deatharte-api.jobs.prochandler
 An hi-level wrapper for `plenary.nvim`, featuring:
 - Spawning a new process with the given args.
 - Killing and respawning the process (e.g. compilation).
@@ -176,7 +177,7 @@ An hi-level wrapper for `plenary.nvim`, featuring:
 
 ```lua
 -- # Compile lualatex document from within nvim 
-local lualatex = require('deatharte.jobs.prochandler').new({
+local lualatex = require('deatharte-api.jobs.prochandler').new({
     -- # Name in the notifications
     name = 'lualatex compile'
 
@@ -234,7 +235,7 @@ lualatex:block_callbacks()
 lualatex:toggle_callbacks()
 ```
 
-#### deatharte.jobs.prochandler.inotifywait
+#### deatharte-api.jobs.prochandler.inotifywait
 [inotifywait](https://linux.die.net/man/1/inotifywait), detect file changes using linux interface.
 As the name implies, requires both `plenary.nvim` and inotifywait; features:
 - All the aforementioned prochandler capabilities.
@@ -242,7 +243,7 @@ As the name implies, requires both `plenary.nvim` and inotifywait; features:
 - Set a filter for the inotifywait binary to whitelist/blacklist filetypes, directories, or filenames 
 ```lua
 -- # Detect file changes to lua files, default callback is a notification event
-local luamodified = require('deatharte.jobs.builtin.inotifywait').new({
+local luamodified = require('deatharte-api.jobs.builtin.inotifywait').new({
     events = { 'modify' },
 
     -- # Only lua files
@@ -264,15 +265,15 @@ luamodified:start()
 -- But probably this job is better handled by changing its callback status
 ```
 
-### deatharte.util
+### deatharte-api.util
 As the name implies, the utility-suite of any project.
 
-#### deatharte.util.deps
+#### deatharte-api.util.deps
 Dependencies, or as I like to call them, packages (pkgs) functionalities.
 - **missingdeps** Check whether or not any dependency from the given list is missing. Acceps either a table or a list.
 ```lua
 -- # e.g. list of dependencies to check for presence
-local md = require('deatharte.util.deps').missingdeps
+local md = require('deatharte-api.util.deps').missingdeps
 local list = md { 'awesome-library', 'another-awesome-library' }
 if list then
 	print('The following dependencies were not found', vim.inspect(list))
@@ -281,7 +282,7 @@ end
 -- The following dependencies were not found { "awesome-library", "another-awesome-library" }
 
 -- # e.g. same thing, but use a detailed callback instead
-local md = require('deatharte.util.deps').missingdeps
+local md = require('deatharte-api.util.deps').missingdeps
 local list = md {
     { 'awesome-library', from = 'noname/awesome-library.nvim'} ,
     { 'another-awesome-library', from ='noname/another-awesome-library.nvim' }
@@ -300,13 +301,13 @@ end
 --    ‹another-awesome-library› from ‹noname/another-awesome-library.nvim›
 ```
 
-#### deatharte.util.string
+#### deatharte-api.util.string
 Short-lived, string related functionalities.
 
 - **utf8len** Determines length of an utf8 string.
 - **count** Determines number of occurences of the given pattern in the string.
 
-#### deatharte.util.path
+#### deatharte-api.util.path
 Path related functionalities, probably tons of other APIs serves similiar purposes (and way better than I do).
 
 - **fileExists** Determines whether or not the file exists.
@@ -314,7 +315,7 @@ Path related functionalities, probably tons of other APIs serves similiar purpos
 - **isDir** Determines whether or not the given path is a directory or a file.
 - **dirParent** Returns the parent directory of the given filename.
 
-#### deatharte.util.vim
+#### deatharte-api.util.vim
 Wrappers around vim builtin wrappers.
 
 **NOTE** These functionalities are not designed for user experience; they are subjected to changes, thus I'd refrain from using these in your nvim configuration, use nvim api instead or a helper of some sort such as [legendary.nvim](https://github.com/mrjones2014/legendary.nvim) or [amend.nvim](https://github.com/anuvyklack/keymap-amend.nvim).
