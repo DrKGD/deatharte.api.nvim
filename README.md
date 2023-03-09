@@ -119,7 +119,7 @@ should be issuing a compile job on write through `inotifywait`.
 TODO: Still missing a save/load feature, coming right up!
 TODO: Add a filter which prevents certain objects from being added to the tracked-list.
 
-#### deatharte.hnd.notificator
+#### deatharte-api.hnd.notificator
 In short: a wrapper for nvim-notify with some extra features I wished they were builtin.
 
 Features:
